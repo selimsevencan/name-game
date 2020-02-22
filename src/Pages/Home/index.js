@@ -25,13 +25,21 @@ export default class Home extends PureComponent {
       wrongName: '',
       notSaidWord: false,
       whoseTurn: 'computer',
+      isStarted: false,
     }
     this.timer = null;
   }
   
   componentDidUpdate(_, prevState) {
+    const {
+      clientWin,
+      computerWin,
+    } = this.state;
     if (prevState.counter < 1) {
       this.stopRecognation();
+    }
+    if (clientWin || computerWin ) {
+      this.updateButtonStatus();
     }
   }
 
@@ -41,6 +49,12 @@ export default class Home extends PureComponent {
     this.setState({
       computerWin: true,
       notSaidWord: true,
+    })
+  }
+
+  updateButtonStatus = () => {
+    this.setState({
+      isStarted: false,
     })
   }
 
@@ -111,6 +125,11 @@ export default class Home extends PureComponent {
       computerWin,
     } = this.state;
     this.startTimer();
+
+    this.setState({
+      isStarted: true,
+    })
+
     if (clientWin || computerWin) {
       this.setState({
         computerWin: false,
@@ -218,6 +237,7 @@ export default class Home extends PureComponent {
       wrongName,
       notSaidWord,
       whoseTurn,
+      isStarted,
     } = this.state;
 
     return (
@@ -236,6 +256,7 @@ export default class Home extends PureComponent {
         <br />
         <Button
           onClick={this.onClick}
+          disabled={isStarted}
         />
         <br />
         <NameList
